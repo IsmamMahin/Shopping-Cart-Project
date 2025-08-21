@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameZone</title>
+    <title>Cart</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body class="bg-violet-950">
     <header class="mt-1">
@@ -35,33 +36,7 @@
         </ul>
         </div>
     </header>
-
-    <main>
-        <div class="flex justify-center text-4xl font-semibold text-white px-4 pt-8">All Items</div>
-        <hr class="bg-white h-1.5 mx-6 my-2 mb-6">
-
-        
-
-        <div class="grid grid-cols-4 gap-4 mx-50" id="list">
-
-            <div id="list item" class="flex flex-col items-center rounded-lg p-4 w-60 h-110 border-2 border-white">
-                <img src="images/items/NSO 12month.jpeg" alt="NSO 12 months" class="w-55 h-55 rounded-md object-cover">
-                <h3 class="text-white text-lg font-bold text-center mb-2">Nintendo Switch Online 12 Months[Physical]</h3>
-                <p class="text-white text-sm text-center overflow-hidden text-ellipsis h-24">Level up with a Nintendo Switch Online + Expansion Pack membership! In addition to all Nintendo Switch Online membership benefits, get access to a library of Nintendo 64™ and Game Boy Advance™ games featuring online play. And a lot more!</p>
-                <div class="mt-4 flex justify-between w-full" id="price quantity">
-                    <h2 class="text-white text-2xl">$19.99</h2>
-                    <button id="add to cart" class="flex items-center space-x-2 bg-white rounded-md px-2 cursor-pointer hover:bg-gray-400">
-                        <img src="images/logos/plus.png" alt="add" class="h-4 w-4">
-                        <p id="add" class="font-bold font-12px">Add</p>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <script src="scripts/items.js"></script>
-        <script src="scripts/main.js"></script>
-    </main>
-
 </body>
+
+<script src="scripts/cart.js"></script>
 </html>
