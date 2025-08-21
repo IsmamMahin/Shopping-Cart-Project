@@ -34,4 +34,7 @@ let listItemsData = [
         desc: "The new Fortnite Gift Card unlocks the opportunity to purchase V-Bucks, Crew, games and more - all powered by the Epic Games Store.",
         img: "images/items/Fortnite 30 dollars.png"
     }
-]
+];
+
+
+let cart = JSON.parse(localStorage.getItem("data")) || [];
