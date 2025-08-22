@@ -11,7 +11,7 @@ let generateList = () =>{
     return (list.innerHTML = listItemsData.map((x)=>{
         // let search = cart.find((x) => x.id === id) || [];
         return `
-            <div id=product-id-${x.id} class="flex flex-col items-center rounded-lg p-4 w-60 h-110 border-2 border-white">
+            <div id=product-id-${x.id} class="flex flex-col items-center rounded-lg p-4 w-60 h-110 border-2 border-white my-2">
                 <img src="${x.img}" alt="${x.name}" class="w-55 h-55 rounded-md object-cover">
                 <h3 class="text-white text-lg font-bold text-center mb-2">${x.name}</h3>
                 <p class="text-white text-sm text-center overflow-hidden text-ellipsis h-24">${x.desc}</p>
