@@ -38,3 +38,8 @@ let listItemsData = [
 
 
 let cart = JSON.parse(localStorage.getItem("data")) || [];
+
+const promoCodes = {
+    "ostad10": 0.10,
+    "ostad50": 0.50
+};

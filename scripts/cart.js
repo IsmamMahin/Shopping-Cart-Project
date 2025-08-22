@@ -11,18 +11,13 @@ let shoppingCart = document.getElementById("shopping-cart");
 
 let generateCartItems = () => {
     if (cart.length !== 0) {
-    // Start with a new, empty string to build the content
     let cartContent = ``;
 
-    // Add the "Cart Items" heading to the content string first
     cartContent += `<div class="text-white text-6xl flex justify-center font-bold underline my-10">Cart Items</div>`;
 
-    // Now, map the cart items and append them to the content string
     cartContent += cart.map((x) => {
         let search = listItemsData.find((y) => y.id === Number(x.id)) || [];
 
-        // Note: The variable 'search' might be an empty array
-        // if find() fails, causing a TypeError. Using || {} is safer.
         let itemData = listItemsData.find((y) => y.id === Number(x.id)) || {};
 
         return `
@@ -76,7 +71,7 @@ let generateCartItems = () => {
 
 
 let increment = (id) => {
-    id = Number(id);   // ensure it's always a number
+    id = Number(id);
     let search = cart.find((x) => x.id === id);
 
     if (search === undefined) {
@@ -127,7 +122,6 @@ let update = (id) => {
 };
 
 let removeItem = (id) => {
-    // console.log(id);
     cart = cart.filter((x) => Number(x.id) !== id);
     generateCartItems();
 
@@ -140,26 +134,68 @@ let removeItem = (id) => {
 
 generateCartItems();
 
-let TotalAmount = () => {
-    if(cart.length !== 0){
-        let amount = cart.map((x) => {
-            let search = listItemsData.find((y) => y.id === Number(x.id)) || [];
-            return x.quantity * search.price;
+let discount = 0;
+let promoMessage = { text: '', class: '' };
 
+
+
+
+const applyPromo = () => {
+    const promoInput = document.getElementById('PromoInput');
+    const enteredCode = promoInput.value.trim().toLowerCase();
+
+    discount = 0;
+    promoMessage.text = '';
+    promoMessage.class = '';
+
+    if (promoCodes[enteredCode]) {
+        discount = promoCodes[enteredCode];
+        promoMessage.text = `Promo code "${enteredCode}" applied!`;
+        promoMessage.class = 'text-green-500';
+    } else {
+        promoMessage.text = 'Invalid promo code.';
+        promoMessage.class = 'text-red-500';
+    }
+
+    TotalAmount();
+};
+
+let TotalAmount = () => {
+    if (cart.length !== 0) {
+        const subtotal = cart.map((x) => {
+            const search = listItemsData.find((y) => y.id === x.id) || {};
+            return x.quantity * (search.price || 0);
         }).reduce((x, y) => x + y, 0);
-        // console.log(amount);
+
+        const total = subtotal * (1 - discount);
+        
         label.innerHTML = `
-        <h2 class="text-white font-semibold text-4xl mt-10">Total Bill : TK ${amount}</h2>
-        <div class="flex justify-center space-x-20 mt-4">
-            <button id="checkout" onclick="checkout()" class="items-center mx-10 bg-green-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Checkout</button>
-            <button id="checkout" onclick="clearCart()" class="items-center mx-10 bg-red-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Clear cart</button>
-        </div>
-        `
+            <div class="text-white text-center mt-10">
+                <h2 class="font-semibold text-3xl mb-2">Subtotal: TK ${subtotal.toFixed(2)}</h2>
+                <h2 class="font-semibold text-3xl mb-4">Discount: TK ${(subtotal * discount).toFixed(2)}</h2>
+            </div>
+
+            <div class="flex flex-col space-y-2 mb-4">
+                <label for="PromoInput" class="text-white text-lg font-semibold text-center">Have a Promo code?</label>
+                <div class="flex justify-center space-x-2 text-white">
+                    <input type="text" id="PromoInput" placeholder="Enter code" class="p-2 rounded-md border border-gray-300 text-white">
+                    <button onclick="applyPromo()" class="bg-fuchsia-600 text-white rounded-md px-4 py-2 font-bold">Apply</button>
+                </div>
+                <p id="couponMessage" class="text-center text-sm font-medium ${promoMessage.class}">${promoMessage.text}</p>
+            </div>
+
+            <h2 class="text-white text-center font-bold text-4xl mt-10">Total Bill: TK ${total.toFixed(2)}</h2>
+            
+            <div class="flex justify-center space-x-10 mt-8">
+                <button id="checkoutBtn" onclick="checkout()" class="bg-green-400 rounded-md py-2 px-6 text-xl font-semibold cursor-pointer">Checkout</button>
+                <button onclick="clearCart()" class="bg-red-400 rounded-md py-2 px-6 text-xl font-semibold cursor-pointer">Clear Cart</button>
+            </div>
+        `;
     }else return;
 };
 
 let checkout = () => {
-    alert("Thank you for shopping with us!!!");
+    alert("Your order has been placed successfully. Thank you for shopping with us!!!");
     clearCart();
     returnToHome();
 
@@ -175,6 +211,5 @@ let clearCart = () => {
 let returnToHome = () => {
     window.location.href = "index.html";
 }
-
 
 TotalAmount();
