@@ -19,11 +19,11 @@ let generateCartItems = () => {
 
     // Now, map the cart items and append them to the content string
     cartContent += cart.map((x) => {
-        let search = listItemsData.find((y) => y.id === x.id) || [];
+        let search = listItemsData.find((y) => y.id === Number(x.id)) || [];
 
         // Note: The variable 'search' might be an empty array
         // if find() fails, causing a TypeError. Using || {} is safer.
-        let itemData = listItemsData.find((y) => y.id === x.id) || {};
+        let itemData = listItemsData.find((y) => y.id === Number(x.id)) || {};
 
         return `
             <div class="flex mx-auto mt-10 bg-white h-45 w-200 p-4 rounded-lg">
@@ -46,7 +46,7 @@ let generateCartItems = () => {
                             <button id="decrease" onclick="decrement(${x.id})" class="h-4 w-4 cursor-pointer">
                                 <img src="images/logos/minus.png" alt="minus">
                             </button>
-                            <p id="cart quantity" class="text-xl">${x.quantity}</p>
+                            <p id="quantity-${x.id}" class="text-xl">${x.quantity}</p>
                             <button id="increase" onclick="increment(${x.id})" class="h-4 w-4 cursor-pointer">
                                 <img src="images/logos/plus.png" alt="plus">
                             </button>
@@ -74,7 +74,9 @@ let generateCartItems = () => {
     }
 };
 
+
 let increment = (id) => {
+    id = Number(id);   // ensure it's always a number
     let search = cart.find((x) => x.id === id);
 
     if (search === undefined) {
@@ -93,25 +95,21 @@ let increment = (id) => {
 };
 
 let decrement = (id) => {
+    id = Number(id);
     let search = cart.find((x) => x.id === id);
 
-    if (search === undefined) {
-        return;
-    } else if (search.quantity === 0) {
-        return;
-    } else {
-        search.quantity -= 1;
-    }
+    if (search === undefined) return;
+    if (search.quantity === 0) return;
+
+    search.quantity -= 1;
 
     cart = cart.filter((x) => x.quantity !== 0);
-    generateCartItems(); 
-
     update(id);
     calculation();
     TotalAmount();
-
     localStorage.setItem("data", JSON.stringify(cart));
 };
+
 
 let update = (id) => {
     let search = cart.find((x) => x.id === id);
@@ -130,7 +128,7 @@ let update = (id) => {
 
 let removeItem = (id) => {
     // console.log(id);
-    cart = cart.filter((x) => x.id !== id);
+    cart = cart.filter((x) => Number(x.id) !== id);
     generateCartItems();
 
     localStorage.setItem("data", JSON.stringify(cart));
@@ -145,7 +143,7 @@ generateCartItems();
 let TotalAmount = () => {
     if(cart.length !== 0){
         let amount = cart.map((x) => {
-            let search = listItemsData.find((y) => y.id === x.id) || [];
+            let search = listItemsData.find((y) => y.id === Number(x.id)) || [];
             return x.quantity * search.price;
 
         }).reduce((x, y) => x + y, 0);
@@ -153,10 +151,30 @@ let TotalAmount = () => {
         label.innerHTML = `
         <h2 class="text-white font-semibold text-4xl mt-10">Total Bill : TK ${amount}</h2>
         <div class="flex justify-center space-x-20 mt-4">
-            <button id="checkout" class="items-center mx-10 bg-green-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Checkout</button>
-            <button id="checkout" class="items-center mx-10 bg-red-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Clear cart</button>
+            <button id="checkout" onclick="checkout()" class="items-center mx-10 bg-green-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Checkout</button>
+            <button id="checkout" onclick="clearCart()" class="items-center mx-10 bg-red-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Clear cart</button>
         </div>
         `
     }else return;
 };
+
+let checkout = () => {
+    alert("Thank you for shopping with us!!!");
+    clearCart();
+    returnToHome();
+
+};
+
+let clearCart = () => {
+    cart = [];
+    generateCartItems();
+    localStorage.setItem("data", JSON.stringify(cart));
+    calculation();
+};
+
+let returnToHome = () => {
+    window.location.href = "index.html";
+}
+
+
 TotalAmount();
