@@ -25,7 +25,7 @@ let listItemsData = [
         name: "Playstation Store $25 Gift Card[Physical]",
         price: 3100,
         desc: "Interactive Commicat Playstation $25: Easily add funds to your account for PlayStation™Network without a credit card. Redeem for anything from the largest library of PlayStation® content in the world, including: Games: Virtual currency and add-on Subscriptions and more.",
-        img: "images/items/Playstation 25 dollar.jpeg"
+        img: "images/items/Playstation 25 dollar.jpg"
     },
     {
         id: 5,
