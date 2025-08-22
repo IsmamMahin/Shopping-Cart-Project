@@ -26,13 +26,13 @@ let generateCartItems = () => {
         let itemData = listItemsData.find((y) => y.id === x.id) || {};
 
         return `
-            <div class="flex ml-40 mt-10 bg-white h-45 w-200 p-4 rounded-lg">
+            <div class="flex mx-auto mt-10 bg-white h-45 w-200 p-4 rounded-lg">
                 <img src="${itemData.img}" alt="item-image" class="h-40 w-40 object-cover rounded-lg my-auto mr-4">
                 
                 <div class="flex flex-col w-full space-y-1">
                     <div id="item-name-cross" class="flex justify-between w-full">
                         <h2 id="name" class="text-2xl font-semibold">${itemData.name}</h2>
-                        <div id="cross">
+                        <div id="cross" onclick="removeItem(${x.id})">
                             <img src="images/logos/cross.png" alt="cross" class="h-10 w-10 cursor-pointer">
                         </div>
                     </div>
@@ -63,13 +63,14 @@ let generateCartItems = () => {
     } else {
         shoppingCart.innerHTML = ``;
         label.innerHTML = `
-            <h2 class="font-bold text-white text-5xl mt-20 mb-7 flex justify-center">Cart is Empty</h2>
-            <a href="index.html" class="flex justify-center">
-                <button class="bg-white rounded-lg h-10 w-auto px-4 text-xl font-semibold cursor-pointer">
-                    Back to Home
-                </button>
+        <h2 class="font-bold text-white text-5xl mb-7 mt-8">Cart is Empty</h2>
+            <a href="index.html">
+            <button class="bg-white rounded-lg h-10 w-auto px-4 text-xl font-semibold cursor-pointer">
+                Back to Home
+            </button>
             </a>
-        `;
+        </div>
+            `;
     }
 };
 
@@ -87,6 +88,7 @@ let increment = (id) => {
 
     update(id);
     calculation();
+    TotalAmount();
     localStorage.setItem("data", JSON.stringify(cart));
 };
 
@@ -106,6 +108,7 @@ let decrement = (id) => {
 
     update(id);
     calculation();
+    TotalAmount();
 
     localStorage.setItem("data", JSON.stringify(cart));
 };
@@ -121,7 +124,39 @@ let update = (id) => {
     }
     
     calculation();
+    TotalAmount();
     generateCartItems();
 };
 
+let removeItem = (id) => {
+    // console.log(id);
+    cart = cart.filter((x) => x.id !== id);
+    generateCartItems();
+
+    localStorage.setItem("data", JSON.stringify(cart));
+
+    calculation();
+    TotalAmount();
+    
+};
+
 generateCartItems();
+
+let TotalAmount = () => {
+    if(cart.length !== 0){
+        let amount = cart.map((x) => {
+            let search = listItemsData.find((y) => y.id === x.id) || [];
+            return x.quantity * search.price;
+
+        }).reduce((x, y) => x + y, 0);
+        // console.log(amount);
+        label.innerHTML = `
+        <h2 class="text-white font-semibold text-4xl mt-10">Total Bill : TK ${amount}</h2>
+        <div class="flex justify-center space-x-20 mt-4">
+            <button id="checkout" class="items-center mx-10 bg-green-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Checkout</button>
+            <button id="checkout" class="items-center mx-10 bg-red-400 rounded-md py px-2 text-xl font-semibold cursor-pointer">Clear cart</button>
+        </div>
+        `
+    }else return;
+};
+TotalAmount();
